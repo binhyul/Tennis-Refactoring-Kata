@@ -1,85 +1,57 @@
-class TennisGame2(private val player1Name: String, private val player2Name: String) : TennisGame {
-    var P1point: Int = 0
-    var P2point: Int = 0
+import kotlin.math.absoluteValue
 
-    var P1res: String = ""
-    var P2res: String = ""
+class TennisGame2(private val player1Name: String, private val player2Name: String) : TennisGame {
+    private var p1point: Int = 0
+    private var p2point: Int = 0
+
+    private var p1res: String = ""
+    private var p2res: String = ""
+
+    private fun getPointRes(playerScore: Int): String {
+        return when (playerScore) {
+            TennisScore.LOVE.score -> TennisScore.LOVE.scoreName
+            TennisScore.FIFTEEN.score -> TennisScore.FIFTEEN.scoreName
+            TennisScore.THIRTY.score -> TennisScore.THIRTY.scoreName
+            else -> TennisScore.FORTY.scoreName
+        }
+    }
+
+    private fun checkSameScore(player1Score: Int, player2Score: Int) = player1Score == player2Score
+
 
     override fun getScore(): String {
-        var score = ""
-        if (P1point == P2point && P1point < 4) {
-            if (P1point == 0)
-                score = "Love"
-            if (P1point == 1)
-                score = "Fifteen"
-            if (P1point == 2)
-                score = "Thirty"
-            score += "-All"
-        }
-        if (P1point == P2point && P1point >= 3)
-            score = "Deuce"
-
-        if (P1point > 0 && P2point == 0) {
-            if (P1point == 1)
-                P1res = "Fifteen"
-            if (P1point == 2)
-                P1res = "Thirty"
-            if (P1point == 3)
-                P1res = "Forty"
-
-            P2res = "Love"
-            score = "$P1res-$P2res"
-        }
-        if (P2point > 0 && P1point == 0) {
-            if (P2point == 1)
-                P2res = "Fifteen"
-            if (P2point == 2)
-                P2res = "Thirty"
-            if (P2point == 3)
-                P2res = "Forty"
-
-            P1res = "Love"
-            score = "$P1res-$P2res"
+        if (checkSameScore(p1point, p2point)) {
+            return if (p1point < 3) {
+                getPointRes(p1point) + HYPHEN + DEUCE_UNDER_FORTY
+            } else {
+                DEUCE_SCORE_NAME
+            }
         }
 
-        if (P1point > P2point && P1point < 4) {
-            if (P1point == 2)
-                P1res = "Thirty"
-            if (P1point == 3)
-                P1res = "Forty"
-            if (P2point == 1)
-                P2res = "Fifteen"
-            if (P2point == 2)
-                P2res = "Thirty"
-            score = "$P1res-$P2res"
+        p1res = getPointRes(p1point)
+        p2res = getPointRes(p2point)
+        val gap = p1point.minus(p2point).absoluteValue
+        return if (p1point > p2point) {
+            if (p1point < 4) {
+                "$p1res-$p2res"
+            } else {
+                if (gap >= 2) {
+                    "$WON_SCORE $player1Name"
+                } else {
+                    "$ADVANTAGE_SCORE $player1Name"
+                }
+            }
+        } else {
+            if (p2point < 4) {
+                "$p1res-$p2res"
+            } else {
+                if (gap >= 2) {
+                    "$WON_SCORE $player2Name"
+                } else {
+                    "$ADVANTAGE_SCORE $player2Name"
+                }
+            }
         }
-        if (P2point > P1point && P2point < 4) {
-            if (P2point == 2)
-                P2res = "Thirty"
-            if (P2point == 3)
-                P2res = "Forty"
-            if (P1point == 1)
-                P1res = "Fifteen"
-            if (P1point == 2)
-                P1res = "Thirty"
-            score = "$P1res-$P2res"
-        }
-
-        if (P1point > P2point && P2point >= 3) {
-            score = "Advantage player1"
-        }
-
-        if (P2point > P1point && P1point >= 3) {
-            score = "Advantage player2"
-        }
-
-        if (P1point >= 4 && P2point >= 0 && P1point - P2point >= 2) {
-            score = "Win for player1"
-        }
-        if (P2point >= 4 && P1point >= 0 && P2point - P1point >= 2) {
-            score = "Win for player2"
-        }
-        return score
     }
 
     fun SetP1Score(number: Int) {
@@ -99,11 +71,11 @@ class TennisGame2(private val player1Name: String, private val player2Name: Stri
     }
 
     fun P1Score() {
-        P1point++
+        p1point++
     }
 
     fun P2Score() {
-        P2point++
+        p2point++
     }
 
     override fun wonPoint(player: String) {

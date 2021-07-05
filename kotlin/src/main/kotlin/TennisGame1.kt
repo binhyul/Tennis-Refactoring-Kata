@@ -61,6 +61,14 @@ class TennisGame1(private val player1Name: String, private val player2Name: Stri
         }
     }
 
+    private fun getPointRes(playerScore: Int): String {
+        return when (playerScore) {
+            TennisScore.LOVE.score -> TennisScore.LOVE.scoreName
+            TennisScore.FIFTEEN.score -> TennisScore.FIFTEEN.scoreName
+            TennisScore.THIRTY.score -> TennisScore.THIRTY.scoreName
+            else -> TennisScore.FORTY.scoreName
+        }
+    }
 
     override fun getScore(): String {
         val player1Score = playerScore1
@@ -75,12 +83,7 @@ class TennisGame1(private val player1Name: String, private val player2Name: Stri
             }
             else -> {
                 listOf(player1Score, player2Score).joinToString(HYPHEN) { score ->
-                    when (score) {
-                        TennisScore.LOVE.score -> TennisScore.LOVE.scoreName
-                        TennisScore.FIFTEEN.score -> TennisScore.FIFTEEN.scoreName
-                        TennisScore.THIRTY.score -> TennisScore.THIRTY.scoreName
-                        else -> TennisScore.FORTY.scoreName
-                    }
+                    getPointRes(score)
                 }
             }
         }
