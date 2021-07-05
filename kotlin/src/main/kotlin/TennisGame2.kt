@@ -54,22 +54,6 @@ class TennisGame2(private val player1Name: String, private val player2Name: Stri
         }
     }
 
-    fun SetP1Score(number: Int) {
-
-        for (i in 0 until number) {
-            P1Score()
-        }
-
-    }
-
-    fun SetP2Score(number: Int) {
-
-        for (i in 0 until number) {
-            P2Score()
-        }
-
-    }
-
     fun P1Score() {
         p1point++
     }
