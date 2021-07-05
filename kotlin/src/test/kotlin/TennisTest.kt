@@ -57,6 +57,7 @@ class TennisTest(private val player1Score: Int, private val player2Score: Int, p
             if (i < this.player2Score)
                 game.wonPoint("player2")
         }
+        print(game.getScore())
         assertEquals(this.expectedScore, game.getScore())
     }
 
